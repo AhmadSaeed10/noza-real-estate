@@ -14,7 +14,7 @@ const others = posts.filter((p) => p.slug !== post.slug);
 ---
 <Base lang={lang} path={`/blog/${post.slug}/`} title={title} description={description} ogType="article"
   crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[articleSchema(lang, post)]}>
-  <PageHero lang={lang} h1={L(post.title, lang)} crumbs={crumbs} />
+  <PageHero mark="ain-dubai" lang={lang} h1={L(post.title, lang)} crumbs={crumbs} />
   <section>
     <div class="wrap" style="max-inline-size:760px">
       <p class="answer">{L(post.answer, lang)}</p>

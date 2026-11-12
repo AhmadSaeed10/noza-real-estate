@@ -1,6 +1,30 @@
 ---
-// An original, generic skyline drawn as a single stroke. Animates once on load.
+// Dubai skyline built from the original landmark drawings plus generic towers.
+// Draws itself once on load (see .skyline in global.css).
+import { landmark, withLength, type LandmarkId } from '../data/landmarks';
+const ground = 228;
+const place: [LandmarkId, number, number][] = [
+  ['burj-al-arab', 40, 0.8],
+  ['ain-dubai', 206, 0.85],
+  ['burj-khalifa', 500, 1],
+  ['museum-future', 694, 0.62],
+  ['dubai-frame', 838, 0.7],
+  ['grand-mosque', 1000, 0.76],
+];
+const groups = place.map(([id, x, s], i) => {
+  const l = landmark(id);
+  return { body: withLength(l.body), tr: `translate(${x} ${ground - l.h * s}) scale(${s})`, d: 0.15 + i * 0.22 };
+});
+const fillers = [
+  'M128 228 V172 H150 V148 H172 V196 H190 V228',
+  'M352 228 V160 H372 V128 H392 V228 M398 228 V178 H420 V140 L432 120 L444 140 V228 M450 228 V186 H474 V228',
+  'M612 228 V150 H630 V110 H648 V228 M654 228 V176 H676 V196 H690 V228',
+  'M934 228 V168 H954 V136 H972 V228 M978 228 V190 H994 V228',
+  'M1172 228 V184 H1194 V228',
+];
 ---
-<svg class="skyline" viewBox="0 0 1200 170" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-  <path d="M0 168 H70 V126 H100 V104 H132 V132 H160 V84 H190 V150 H228 V112 H262 V70 H282 V44 L292 10 L302 44 V70 H322 V150 H372 V98 H408 V120 H436 V64 H466 V150 H520 V108 H548 V132 H580 V30 L590 4 L600 30 V132 H632 V90 H664 V140 H700 V76 H732 V118 H764 V56 H790 V150 H836 V102 H868 V128 H900 V80 H934 V144 H972 V108 H1004 V62 H1034 V126 H1070 V96 H1104 V138 H1140 V118 H1170 V168 H1200" />
+<svg class="skyline" viewBox="0 0 1200 232" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">
+  <path pathLength="1" style="--d:0s" d="M0 228 H1200" />
+  {fillers.map((d, i) => <path pathLength="1" style={`--d:${0.4 + i * 0.25}s`} d={d} />)}
+  {groups.map((g) => <g transform={g.tr} style={`--d:${g.d}s`} set:html={g.body} />)}
 </svg>

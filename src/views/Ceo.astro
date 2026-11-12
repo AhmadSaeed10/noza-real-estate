@@ -11,7 +11,7 @@ const description = lang === 'ar' ? 'رسالة محمد زاهد إقبال، �
 const crumbs = [{ name: t('ceo_h1', lang), path: '/ceo-message/' }];
 ---
 <Base lang={lang} path="/ceo-message/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]}>
-  <PageHero lang={lang} h1={t('ceo_h1', lang)} crumbs={crumbs} />
+  <PageHero mark="grand-mosque" lang={lang} h1={t('ceo_h1', lang)} crumbs={crumbs} />
   <section>
     <div class="wrap" style="max-inline-size:760px">
       <p class="lead">{t('ceo_p1', lang)}</p>

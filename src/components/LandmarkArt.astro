@@ -1,0 +1,6 @@
+---
+import { landmark, withLength, type LandmarkId } from '../data/landmarks';
+const { id, class: cls = 'lm-art' } = Astro.props as { id: LandmarkId; class?: string };
+const l = landmark(id);
+---
+<svg class={cls} viewBox={`0 0 ${l.w} ${l.h}`} aria-hidden="true" focusable="false" set:html={withLength(l.body)} />

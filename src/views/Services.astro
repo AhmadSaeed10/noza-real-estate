@@ -13,7 +13,7 @@ const description = lang === 'ar' ? 'استشارات استثمارية وإد�
 const crumbs = [{ name: t('nav_services', lang), path: '/services/' }];
 ---
 <Base lang={lang} path="/services/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={services.map((s) => serviceSchema(lang, s))}>
-  <PageHero lang={lang} h1={t('services_h1', lang)} lead={t('services_sub', lang)} crumbs={crumbs} />
+  <PageHero mark="museum-future" lang={lang} h1={t('services_h1', lang)} lead={t('services_sub', lang)} crumbs={crumbs} />
   <section>
     <div class="wrap">
       <div class="svc">

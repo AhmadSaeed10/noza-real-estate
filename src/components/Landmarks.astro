@@ -1,0 +1,21 @@
+---
+import { L, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { landmarks } from '../data/landmarks';
+import LandmarkArt from './LandmarkArt.astro';
+const { lang } = Astro.props as { lang: Lang };
+---
+<section class="lm-sec" id="landmarks" aria-labelledby="lm-h">
+  <div class="wrap">
+    <div class="sec-head"><div><h2 id="lm-h">{t('lm_title', lang)}</h2><p>{t('lm_sub', lang)}</p></div></div>
+    <ul class="lm-grid">
+      {landmarks.map((l) => (
+        <li class="lm">
+          <div class="lm-stage"><LandmarkArt id={l.id} /></div>
+          <h3>{L(l.name, lang)}</h3>
+          <p>{L(l.note, lang)}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

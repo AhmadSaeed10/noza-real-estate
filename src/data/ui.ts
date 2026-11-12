@@ -156,6 +156,10 @@ const u = {
   rights: { en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.' },
   home: { en: 'Home', ar: 'الرئيسية' },
 
+  // landmarks
+  lm_title: { en: 'Live close to the icons', ar: 'عِش بالقرب من المعالم' },
+  lm_sub: { en: 'Every community we cover sits minutes from a landmark. These are the ones our clients ask about most.', ar: 'كل منطقة نعمل بها تبعد دقائق عن معلم شهير. هذه أكثر المعالم التي يسأل عنها عملاؤنا.' },
+
   // 404
   nf_h1: { en: 'This page is not here', ar: 'هذه الصفحة غير موجودة' },
   nf_p: { en: 'The link may be old. Go back to the homepage or ask a broker to find what you need.', ar: 'قد يكون الرابط قديمًا. عد إلى الصفحة الرئيسية أو اطلب من وسيط مساعدتك فيما تبحث عنه.' },

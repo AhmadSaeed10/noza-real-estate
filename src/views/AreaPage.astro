@@ -26,7 +26,7 @@ const others = areas.filter((a) => a.slug !== area.slug);
 <Base lang={lang} path={`/${area.slug}/`} title={title} description={description} image={area.img}
   crumbs={[{ name: t('home', lang), path: '/' }, { name: t('nav_areas', lang), path: '/' }, { name, path: `/${area.slug}/` }]}
   schema={[areaSchema(lang, area), faqSchema(lang, faqSub)]}>
-  <PageHero lang={lang} h1={h1} crumbs={[{ name: t('nav_areas', lang), path: '/#areas' }, { name, path: `/${area.slug}/` }]} />
+  <PageHero mark="palm-jumeirah" lang={lang} h1={h1} crumbs={[{ name: t('nav_areas', lang), path: '/#areas' }, { name, path: `/${area.slug}/` }]} />
   <section>
     <div class="wrap two">
       <div>

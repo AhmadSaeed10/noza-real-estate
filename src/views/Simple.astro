@@ -29,7 +29,7 @@ const copy = {
 }[kind];
 ---
 <Base lang={lang} path={copy.path} title={`${copy.h1} | NOZA Real Estate`} description={copy.body[0].slice(0, 150)} noindex={kind === '404'}>
-  <PageHero lang={lang} h1={copy.h1} crumbs={kind === '404' ? [] : [{ name: copy.h1, path: copy.path }]} />
+  <PageHero mark="museum-future" lang={lang} h1={copy.h1} crumbs={kind === '404' ? [] : [{ name: copy.h1, path: copy.path }]} />
   <section>
     <div class="wrap" style="max-inline-size:760px">
       {copy.body.map((b) => <p>{b}</p>)}

@@ -6,7 +6,7 @@ export const site = {
   phoneDisplay: '+971 52 587 3273',
   whatsapp: '971525873273',
   founded: 2006,
-  logo: 'https://nozarealestate.ae/wp-content/uploads/2024/08/cropped-NOZA-Real-Estate-Logo-Final-scaled-1-270x270.jpg',
+  logo: 'https://nozarealestate.ae/images/noza-logo.png',
   socials: {
     facebook: 'https://www.facebook.com/nozarealestate',
     instagram: 'https://www.instagram.com/nozarealestate/',

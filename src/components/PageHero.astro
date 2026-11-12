@@ -1,9 +1,14 @@
 ---
 import { lp, type Lang } from '../i18n';
 import { t } from '../data/ui';
-const { lang, h1, lead, crumbs = [] } = Astro.props as { lang: Lang; h1: string; lead?: string; crumbs?: { name: string; path: string }[] };
+import type { LandmarkId } from '../data/landmarks';
+import LandmarkArt from './LandmarkArt.astro';
+const { lang, h1, lead, crumbs = [], mark = 'burj-khalifa' } = Astro.props as {
+  lang: Lang; h1: string; lead?: string; crumbs?: { name: string; path: string }[]; mark?: LandmarkId;
+};
 ---
 <div class="phero">
+  <LandmarkArt id={mark} class="phero-mark" />
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href={lp(lang, '/')}>{t('home', lang)}</a>
