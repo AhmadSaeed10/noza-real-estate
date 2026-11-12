@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { posts, type Post } from '../data/posts';
+import { articleSchema } from '../data/schema';
+const { lang, post } = Astro.props as { lang: Lang; post: Post };
+const title = `${L(post.title, lang)} | NOZA`;
+const description = L(post.answer, lang).slice(0, 155);
+const crumbs = [{ name: t('nav_blog', lang), path: '/blog/' }, { name: L(post.title, lang), path: `/blog/${post.slug}/` }];
+const others = posts.filter((p) => p.slug !== post.slug);
+---
+<Base lang={lang} path={`/blog/${post.slug}/`} title={title} description={description} ogType="article"
+  crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[articleSchema(lang, post)]}>
+  <PageHero lang={lang} h1={L(post.title, lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap" style="max-inline-size:760px">
+      <p class="answer">{L(post.answer, lang)}</p>
+      {post.body.map((b) => <p>{L(b, lang)}</p>)}
+      <p class="fine">{t('updated', lang)}: <time datetime={post.updated}>{post.updated}</time></p>
+      <h2 style="font-size:1.3rem;margin-block-start:40px">{t('blog_h1', lang)}</h2>
+      <ul class="facts">{others.map((o) => <li><a href={lp(lang, `/blog/${o.slug}/`)}>{L(o.title, lang)}</a></li>)}</ul>
+    </div>
+  </section>
+  <FinalCta lang={lang} />
+</Base>

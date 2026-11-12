@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { site } from '../data/site';
+import { why } from '../data/content';
+const { lang } = Astro.props as { lang: Lang };
+const title = lang === 'ar' ? 'من نحن | نوزا العقارية، وسطاء عقارات في دبي منذ 2006' : 'About NOZA | Dubai Real Estate Brokers Since 2006';
+const description = lang === 'ar' ? 'تعرّف على نوزا العقارية: أكثر من 15 عامًا في دبي وأكثر من 50 وسيطًا معتمدًا من ريرا وفريق من أكثر من 30 جنسية.' : 'Meet NOZA Real Estate: 15+ years in Dubai, 50+ RERA-certified brokers and a team of 30+ nationalities.';
+const crumbs = [{ name: t('nav_about', lang), path: '/about-noza-real-estate/' }];
+const people = [
+  { name: site.founder, role: t('founder_role', lang), bio: t('founder_bio', lang) },
+  { name: site.md, role: t('md_role', lang), bio: t('md_bio', lang) },
+];
+const personSchema = people.map((p) => ({ '@type': 'Person', name: p.name, jobTitle: p.role, worksFor: { '@id': site.url + '/#agent' } }));
+---
+<Base lang={lang} path="/about-noza-real-estate/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={personSchema} ogType="website">
+  <PageHero lang={lang} h1={t('about_h1', lang)} lead={t('about_lead', lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap two">
+      <div>
+        <p class="lead">{t('about_p1', lang)}</p>
+        <p>{t('about_p2', lang)}</p>
+        <h2 style="margin-block-start:40px">{t('team_title', lang)}</h2>
+        {people.map((p) => (<div class="person"><h3>{p.name}</h3><small>{p.role}</small><p>{p.bio}</p></div>))}
+        <p style="margin-block-start:20px"><a href={lp(lang, '/ceo-message/')}>{t('ceo_h1', lang)}</a></p>
+      </div>
+      <aside class="card">
+        <h2 style="font-size:1.3rem">{t('why_title', lang)}</h2>
+        <ul class="facts">{why.map((w) => <li><strong>{L(w.title, lang)}</strong></li>)}</ul>
+      </aside>
+    </div>
+  </section>
+  <FinalCta lang={lang} />
+</Base>

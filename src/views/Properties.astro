@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { projects } from '../data/projects';
+import { itemListSchema } from '../data/schema';
+const { lang } = Astro.props as { lang: Lang };
+const title = lang === 'ar' ? 'عقارات للبيع في دبي | مشاريع قيد الإنشاء | نوزا' : 'Dubai Properties for Sale | Off-Plan Projects | NOZA';
+const description = lang === 'ar' ? 'تصفّح مشاريع دبي الرائجة من شقق وتاون هاوس وفلل، واطلب الأسعار وخطط الدفع من وسطاء نوزا.' : 'Browse trending Dubai projects across apartments, townhouses and villas, and request prices and payment plans from NOZA brokers.';
+const crumbs = [{ name: t('nav_properties', lang), path: '/properties/' }];
+const filters = [
+  ['all', t('filter_all', lang)],
+  ['apartment', lang === 'ar' ? 'شقق' : 'Apartments'],
+  ['townhouse', lang === 'ar' ? 'تاون هاوس' : 'Townhouses'],
+  ['villa', lang === 'ar' ? 'فلل' : 'Villas'],
+];
+---
+<Base lang={lang} path="/properties/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]}
+  schema={[itemListSchema(lang, t('properties_h1', lang), projects.map((p) => ({ name: p.name, url: lp(lang, `/projects/${p.slug}/`) })))]}>
+  <PageHero lang={lang} h1={t('properties_h1', lang)} lead={t('properties_sub', lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap">
+      <div class="chips" role="group" aria-label="Filter">
+        {filters.map(([v, label]) => <button class="chip" type="button" data-filter={v} aria-pressed={v === 'all'}>{label}</button>)}
+      </div>
+      <div class="grid g3" id="plist">{projects.map((p) => <ProjectCard p={p} lang={lang} />)}</div>
+      <p class="lead" style="margin-block-start:32px">{t('rent_note', lang)}</p>
+    </div>
+  </section>
+  <FinalCta lang={lang} />
+  <script>
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#plist .pcard'));
+    chips.forEach((c) => c.addEventListener('click', () => {
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      cards.forEach((k) => { k.hidden = c.dataset.filter !== 'all' && k.dataset.type !== c.dataset.filter; });
+    }));
+  </script>
+</Base>

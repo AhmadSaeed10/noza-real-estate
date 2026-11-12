@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { posts } from '../data/posts';
+const { lang } = Astro.props as { lang: Lang };
+const title = lang === 'ar' ? 'أدلة عقارات دبي | إجابات مختصرة | نوزا' : 'Dubai Property Guides | Direct Answers | NOZA';
+const description = t('blog_sub', lang);
+const crumbs = [{ name: t('nav_blog', lang), path: '/blog/' }];
+---
+<Base lang={lang} path="/blog/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]}>
+  <PageHero lang={lang} h1={t('blog_h1', lang)} lead={t('blog_sub', lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap">
+      <div class="svc">
+        {posts.map((p) => (
+          <article>
+            <h2 style="font-size:1.4rem"><a href={lp(lang, `/blog/${p.slug}/`)} style="text-decoration:none">{L(p.title, lang)}</a></h2>
+            <p>{L(p.answer, lang)}</p>
+            <a href={lp(lang, `/blog/${p.slug}/`)}>{t('read', lang)}</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

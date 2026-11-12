@@ -1,0 +1,82 @@
+---
+import { site } from '../data/site';
+import { t } from '../data/ui';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  id: string;
+  headingId?: string;
+  variant?: 'callback' | 'enquiry' | 'brochure' | 'contact';
+  project?: string;
+  title?: string;
+  sub?: string;
+  submit?: string;
+  hideHeading?: boolean;
+}
+const { lang, id, headingId, variant = 'callback', project, title, sub, submit, hideHeading } = Astro.props;
+const heading =
+  title ?? (variant === 'brochure' ? t('brochure_title', lang) : variant === 'enquiry' ? t('enquire_title', lang) : variant === 'contact' ? t('help_you', lang) : t('cb_title', lang));
+const subtext = sub ?? (variant === 'brochure' ? t('brochure_sub', lang) : variant === 'callback' ? t('cb_sub', lang) : '');
+const btn = submit ?? (variant === 'brochure' ? t('brochure_btn', lang) : variant === 'callback' ? t('cb_submit', lang) : t('send_message', lang));
+const intro = lang === 'ar' ? 'طلب جديد من موقع نوزا' : 'New enquiry from nozarealestate.ae';
+const interests = [
+  ['Buy off-plan', 'i_offplan'],
+  ['Buy a ready property', 'i_ready'],
+  ['Rent a property', 'i_rent'],
+  ['Sell or list my property', 'i_sell'],
+  ['Property or holiday-home management', 'i_manage'],
+] as const;
+---
+<form
+  class="form"
+  method="post"
+  novalidate
+  data-lead={`${variant}${project ? ':' + project : ''}`}
+  data-endpoint={site.formEndpoint}
+  data-ok={t('ok_sent', lang)}
+  data-ok-wa={t('ok_wa', lang)}
+  data-err={t('err_send', lang)}
+  data-err-phone={t('err_phone', lang)}
+  data-sending={t('sending', lang)}
+  data-wa-intro={intro}
+>
+  {!hideHeading && <h2 id={headingId}>{heading}</h2>}
+  {!hideHeading && subtext && <p>{subtext}</p>}
+  {project && <input type="hidden" name="project" value={project} />}
+  <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  {variant === 'contact' ? (
+    <>
+      <div class="row">
+        <div class="field"><label for={`${id}-fn`}>{t('f_first', lang)}</label><input id={`${id}-fn`} name="first_name" autocomplete="given-name" required /></div>
+        <div class="field"><label for={`${id}-ln`}>{t('f_last', lang)}</label><input id={`${id}-ln`} name="last_name" autocomplete="family-name" /></div>
+      </div>
+      <div class="row">
+        <div class="field"><label for={`${id}-em`}>{t('f_email', lang)}</label><input id={`${id}-em`} name="email" type="email" autocomplete="email" /></div>
+        <div class="field"><label for={`${id}-ph`}>{t('f_phone', lang)}</label><input id={`${id}-ph`} name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 5X XXX XXXX" required /></div>
+      </div>
+      <div class="field"><label for={`${id}-co`}>{t('f_country', lang)}</label><input id={`${id}-co`} name="country" autocomplete="country-name" /></div>
+      <div class="field"><label for={`${id}-dt`}>{t('f_details', lang)}</label><textarea id={`${id}-dt`} name="details"></textarea></div>
+    </>
+  ) : (
+    <>
+      <div class="field"><label for={`${id}-n`}>{t('f_name', lang)}</label><input id={`${id}-n`} name="name" autocomplete="name" required /></div>
+      <div class="field"><label for={`${id}-p`}>{t('f_phone', lang)}</label><input id={`${id}-p`} name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 5X XXX XXXX" required /></div>
+      {variant === 'callback' && (
+        <div class="field">
+          <label for={`${id}-i`}>{t('f_interest', lang)}</label>
+          <select id={`${id}-i`} name="interest">
+            {interests.map(([v, k]) => <option value={v}>{t(k, lang)}</option>)}
+          </select>
+        </div>
+      )}
+      {variant === 'enquiry' && (
+        <div class="field"><label for={`${id}-d`}>{t('f_details', lang)}</label><textarea id={`${id}-d`} name="details"></textarea></div>
+      )}
+    </>
+  )}
+  <button class="btn btn-primary" type="submit">{btn}</button>
+  <div class="status" role="status" aria-live="polite"></div>
+  <p class="fine">{t('consent', lang)}</p>
+</form>

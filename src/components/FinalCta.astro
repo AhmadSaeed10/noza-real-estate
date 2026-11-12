@@ -1,0 +1,21 @@
+---
+import CallbackForm from './CallbackForm.astro';
+import { t } from '../data/ui';
+import { wa, site } from '../data/site';
+import { Icon } from './icons';
+import type { Lang } from '../i18n';
+const { lang, project } = Astro.props as { lang: Lang; project?: string };
+---
+<section class="dark final" aria-labelledby="final-h">
+  <div class="wrap grid-2">
+    <div>
+      <h2 id="final-h">{t('final_title', lang)}</h2>
+      <p class="lead">{t('final_sub', lang)}</p>
+      <div class="hero-cta">
+        <a class="btn btn-wa" href={wa(t('hero_wa_msg', lang))} target="_blank" rel="noopener" data-track="whatsapp_click"><Fragment set:html={Icon.wa} />{t('whatsapp', lang)}</a>
+        <a class="btn btn-ghost" href={`tel:${site.phone}`} dir="ltr"><Fragment set:html={Icon.phone} />{site.phoneDisplay}</a>
+      </div>
+    </div>
+    <div class="card"><CallbackForm lang={lang} id="final" project={project} /></div>
+  </div>
+</section>

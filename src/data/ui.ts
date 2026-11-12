@@ -1,0 +1,165 @@
+import type { Bi, Lang } from '../i18n';
+
+const u = {
+  // nav
+  nav_home: { en: 'Home', ar: 'الرئيسية' },
+  nav_properties: { en: 'Properties', ar: 'العقارات' },
+  nav_areas: { en: 'Areas', ar: 'المناطق' },
+  nav_services: { en: 'Services', ar: 'الخدمات' },
+  nav_about: { en: 'About', ar: 'من نحن' },
+  nav_blog: { en: 'Guides', ar: 'الأدلة' },
+  nav_contact: { en: 'Contact', ar: 'تواصل معنا' },
+  skip: { en: 'Skip to content', ar: 'انتقل إلى المحتوى' },
+  menu: { en: 'Menu', ar: 'القائمة' },
+  close: { en: 'Close', ar: 'إغلاق' },
+  lang_switch: { en: 'العربية', ar: 'English' },
+  lang_switch_label: { en: 'Switch to Arabic', ar: 'Switch to English' },
+  promo_bar: { en: 'Free consultation. Refer a friend and earn a referral bonus.', ar: 'استشارة مجانية. أحِل صديقًا واحصل على مكافأة إحالة.' },
+  call: { en: 'Call', ar: 'اتصل' },
+  whatsapp: { en: 'WhatsApp', ar: 'واتساب' },
+  call_me: { en: 'Get a call', ar: 'اطلب اتصالًا' },
+
+  // callback form
+  cb_title: { en: 'Get a call in 55 seconds', ar: 'نتصل بك خلال 55 ثانية' },
+  cb_sub: { en: 'Leave your number and a broker will call you shortly.', ar: 'اترك رقمك وسيتصل بك أحد الوسطاء قريبًا.' },
+  f_name: { en: 'Your name', ar: 'الاسم' },
+  f_first: { en: 'First name', ar: 'الاسم الأول' },
+  f_last: { en: 'Last name', ar: 'اسم العائلة' },
+  f_phone: { en: 'Mobile number', ar: 'رقم الجوال' },
+  f_email: { en: 'Email address', ar: 'البريد الإلكتروني' },
+  f_country: { en: 'Country you are in', ar: 'بلد الإقامة' },
+  f_details: { en: 'Details', ar: 'التفاصيل' },
+  f_interest: { en: 'I want to', ar: 'أرغب في' },
+  i_offplan: { en: 'Buy off-plan', ar: 'شراء عقار قيد الإنشاء' },
+  i_ready: { en: 'Buy a ready property', ar: 'شراء عقار جاهز' },
+  i_rent: { en: 'Rent a property', ar: 'استئجار عقار' },
+  i_sell: { en: 'Sell or list my property', ar: 'بيع عقاري أو عرضه' },
+  i_manage: { en: 'Property or holiday-home management', ar: 'إدارة عقار أو بيت عطلات' },
+  cb_submit: { en: 'Call me now', ar: 'اتصلوا بي الآن' },
+  send_message: { en: 'Send message', ar: 'إرسال الرسالة' },
+  sending: { en: 'Sending…', ar: 'جارٍ الإرسال…' },
+  ok_sent: { en: 'Received. A broker will call you shortly.', ar: 'تم الاستلام. سيتصل بك أحد الوسطاء قريبًا.' },
+  ok_wa: { en: 'Opening WhatsApp so you can send your request.', ar: 'جارٍ فتح واتساب لإرسال طلبك.' },
+  err_phone: { en: 'Enter a valid mobile number, including the country code.', ar: 'أدخل رقم جوال صحيحًا مع رمز الدولة.' },
+  err_send: { en: 'Could not send. Please try WhatsApp or call us.', ar: 'تعذّر الإرسال. يُرجى استخدام واتساب أو الاتصال بنا.' },
+  consent: { en: 'By sending, you agree to be contacted about your request.', ar: 'بإرسال الطلب، توافق على أن نتواصل معك بشأنه.' },
+
+  // hero
+  hero_h1: { en: 'Invest in Dubai property with brokers who call back in 55 seconds', ar: 'استثمر في عقارات دبي مع وسطاء يتصلون بك خلال 55 ثانية' },
+  hero_sub: { en: 'Off-plan launches, ready homes and rental management from a Dubai brokerage trading since 2006.', ar: 'مشاريع قيد الإنشاء ومنازل جاهزة وإدارة إيجارات من وسيط عقاري في دبي منذ عام 2006.' },
+  hero_cta1: { en: 'See trending projects', ar: 'تصفّح المشاريع الرائجة' },
+  hero_cta2: { en: 'WhatsApp an advisor', ar: 'راسل مستشارًا عبر واتساب' },
+  hero_wa_msg: { en: 'Hello NOZA, I would like advice on Dubai property.', ar: 'مرحبًا نوزا، أرغب في استشارة بخصوص عقارات دبي.' },
+  trust_since: { en: 'In Dubai since', ar: 'في دبي منذ' },
+  trust_brokers: { en: 'RERA-certified brokers', ar: 'وسيطًا معتمدًا من ريرا' },
+  trust_nat: { en: 'Nationalities on the team', ar: 'جنسية في فريق العمل' },
+  trust_years: { en: 'Years of market experience', ar: 'عامًا من الخبرة في السوق' },
+
+  // projects
+  trend_title: { en: 'Top trending projects', ar: 'أبرز المشاريع الرائجة' },
+  trend_sub: { en: 'Launches clients ask us about most. Prices and payment plans change by release, so we confirm the current offer when you ask.', ar: 'المشاريع الأكثر طلبًا من عملائنا. تتغير الأسعار وخطط الدفع بحسب كل مرحلة طرح، لذلك نؤكد لك العرض الحالي عند الطلب.' },
+  price_req: { en: 'Price on request', ar: 'السعر عند الطلب' },
+  req_price: { en: 'Request price and plan', ar: 'اطلب السعر وخطة الدفع' },
+  view_project: { en: 'View project', ar: 'عرض المشروع' },
+  all_projects: { en: 'See all properties', ar: 'عرض جميع العقارات' },
+  developer: { en: 'Developer', ar: 'المطوّر' },
+  community: { en: 'Community', ar: 'المنطقة' },
+  dev_on_req: { en: 'Developer details on request', ar: 'تفاصيل المطوّر عند الطلب' },
+  brochure_title: { en: 'Get the brochure and floor plans', ar: 'احصل على الكتيّب والمخططات' },
+  brochure_sub: { en: 'Share your details and we send the latest brochure, floor plans and payment plan on WhatsApp.', ar: 'شاركنا بياناتك وسنرسل لك أحدث كتيّب ومخططات وخطة الدفع عبر واتساب.' },
+  brochure_btn: { en: 'Send me the brochure', ar: 'أرسلوا لي الكتيّب' },
+  enquire_title: { en: 'Ask about this project', ar: 'استفسر عن هذا المشروع' },
+  overview: { en: 'Overview', ar: 'نظرة عامة' },
+  filter_all: { en: 'All', ar: 'الكل' },
+  properties_h1: { en: 'Dubai properties and off-plan projects', ar: 'عقارات دبي والمشاريع قيد الإنشاء' },
+  properties_sub: { en: 'Browse the projects our brokers are placing buyers into right now.', ar: 'تصفّح المشاريع التي يوجّه وسطاؤنا المشترين إليها حاليًا.' },
+  rent_note: { en: 'Looking to rent? Tell us your budget and area and we send matching listings.', ar: 'تبحث عن عقار للإيجار؟ أخبرنا بميزانيتك ومنطقتك لنرسل لك الخيارات المناسبة.' },
+
+  // areas
+  areas_title: { en: 'Popular investment areas in Dubai', ar: 'مناطق الاستثمار الشائعة في دبي' },
+  areas_sub: { en: 'Pick a community to see what it offers and ask about listings there.', ar: 'اختر منطقة لتعرف ما تقدمه واسأل عن العقارات المتاحة فيها.' },
+  area_cta: { en: 'Ask about listings in', ar: 'اسأل عن العقارات في' },
+  area_query: { en: 'Send your query', ar: 'أرسل استفسارك' },
+  explore: { en: 'Explore', ar: 'استكشف' },
+
+  // roi
+  roi_title: { en: 'Estimate your rental return', ar: 'قدّر عائدك الإيجاري' },
+  roi_sub: { en: 'An illustrative calculator. Enter your own numbers; actual rents, fees and vacancy vary by unit and building.', ar: 'حاسبة توضيحية. أدخل أرقامك الخاصة، فالإيجارات والرسوم والشواغر الفعلية تختلف بحسب الوحدة والمبنى.' },
+  roi_price: { en: 'Purchase price (AED)', ar: 'سعر الشراء (درهم)' },
+  roi_yield: { en: 'Expected gross yield (%)', ar: 'العائد الإجمالي المتوقع (%)' },
+  roi_costs: { en: 'Service charges and management (% of rent)', ar: 'رسوم الخدمة والإدارة (% من الإيجار)' },
+  roi_vacancy: { en: 'Vacant months per year', ar: 'أشهر الشغور في السنة' },
+  roi_gross: { en: 'Gross annual rent', ar: 'الإيجار السنوي الإجمالي' },
+  roi_net: { en: 'Net annual income', ar: 'صافي الدخل السنوي' },
+  roi_net_yield: { en: 'Net yield', ar: 'العائد الصافي' },
+  roi_five: { en: 'Net income over 5 years', ar: 'صافي الدخل خلال 5 سنوات' },
+  roi_cta: { en: 'Get a tailored projection', ar: 'احصل على توقعات مخصصة' },
+  roi_disclaimer: { en: 'Not a guarantee of returns. Figures exclude purchase fees and taxes.', ar: 'ليست ضمانًا للعوائد. الأرقام لا تشمل رسوم الشراء والضرائب.' },
+  aed: { en: 'AED', ar: 'درهم' },
+
+  // services / about / why
+  services_title: { en: 'Services', ar: 'الخدمات' },
+  services_sub: { en: 'From the first viewing to monthly rent collection, handled under one roof.', ar: 'من المعاينة الأولى إلى تحصيل الإيجار الشهري، كل شيء تحت سقف واحد.' },
+  services_h1: { en: 'NOZA Real Estate services', ar: 'خدمات نوزا العقارية' },
+  learn_more: { en: 'Talk to us about this', ar: 'تحدث إلينا بشأن هذه الخدمة' },
+  why_title: { en: 'Why work with NOZA', ar: 'لماذا نوزا' },
+  about_h1: { en: 'About NOZA Real Estate', ar: 'عن نوزا العقارية' },
+  about_lead: { en: 'Client focused. Results oriented.', ar: 'نضع العميل أولًا ونركّز على النتائج.' },
+  about_p1: { en: 'NOZA is a Dubai brokerage with access to a wide selection of residential, commercial and off-plan property across the region. Our team speaks to buyers in their own language, and represents more than 30 nationalities.', ar: 'نوزا شركة وساطة عقارية في دبي، تتيح لعملائها مجموعة واسعة من العقارات السكنية والتجارية والمشاريع قيد الإنشاء في المنطقة. يتحدث فريقنا إلى المشترين بلغتهم، ويضم أكثر من 30 جنسية.' },
+  about_p2: { en: 'With more than 15 years of experience, we help clients decide with clear numbers, honest advice and support through every step of the transaction.', ar: 'بخبرة تتجاوز 15 عامًا، نساعد عملاءنا على اتخاذ قراراتهم بأرقام واضحة ونصيحة صادقة ودعم في كل خطوة من خطوات الصفقة.' },
+  team_title: { en: 'Leadership', ar: 'الإدارة' },
+  founder_role: { en: 'Founder and CEO', ar: 'المؤسس والرئيس التنفيذي' },
+  md_role: { en: 'Managing Director', ar: 'المديرة العامة' },
+  founder_bio: { en: 'Brings over 12 years of experience in real estate and marketing, combining inventive marketing with a deep understanding of the market.', ar: 'يمتلك أكثر من 12 عامًا من الخبرة في العقارات والتسويق، ويجمع بين أفكار تسويقية مبتكرة وفهم عميق للسوق.' },
+  md_bio: { en: 'Leads investment advisory, with a focus on property investment trends and strategies tailored to each client’s financial goals.', ar: 'تقود الاستشارات الاستثمارية، مع تركيز على اتجاهات الاستثمار العقاري واستراتيجيات تناسب الأهداف المالية لكل عميل.' },
+  ceo_h1: { en: 'Message from the founder', ar: 'رسالة المؤسس' },
+  ceo_p1: { en: 'Welcome to NOZA Real Estate. As founder and CEO, I am proud to introduce a company that specializes in real estate investment advisory and property sales. Our mission is to guide you through the market with expert advice and personal service.', ar: 'مرحبًا بكم في نوزا العقارية. بصفتي المؤسس والرئيس التنفيذي، يسعدني أن أقدّم لكم شركة متخصصة في الاستشارات الاستثمارية العقارية وبيع العقارات. رسالتنا أن نرشدكم في السوق بنصيحة الخبراء وخدمة شخصية.' },
+  ceo_p2: { en: 'We believe real estate is more than transactions. It is about smart investments that match your goals. Thank you for trusting us as your partner.', ar: 'نؤمن بأن العقار أكبر من مجرد صفقات، فهو استثمار ذكي يتوافق مع أهدافكم. شكرًا لثقتكم بنا شريكًا لكم.' },
+
+  // partners / testimonials / faq
+  partners_title: { en: 'Developers we work with', ar: 'المطوّرون الذين نتعامل معهم' },
+  tst_title: { en: 'What clients say', ar: 'ماذا يقول عملاؤنا' },
+  faq_title: { en: 'Questions buyers ask us', ar: 'أسئلة يطرحها المشترون علينا' },
+  faq_cta: { en: 'Still have a question? Ask a broker', ar: 'لديك سؤال آخر؟ اسأل وسيطًا' },
+
+  // final cta
+  final_title: { en: 'Tell us what you want to buy, and we call you back', ar: 'أخبرنا بما تريد شراءه ونتصل بك' },
+  final_sub: { en: 'No obligation. We answer in English and Arabic.', ar: 'دون أي التزام. نرد بالعربية والإنجليزية.' },
+
+  // contact
+  contact_h1: { en: 'Contact NOZA Real Estate', ar: 'تواصل مع نوزا العقارية' },
+  contact_sub: { en: 'Call, message on WhatsApp, or leave your details and we reply the same day.', ar: 'اتصل أو راسلنا عبر واتساب أو اترك بياناتك وسنردّ في اليوم نفسه.' },
+  help_you: { en: 'Let us help you', ar: 'دعنا نساعدك' },
+  partner_title: { en: 'Become a partner', ar: 'كن شريكًا' },
+  starter: { en: 'Starter path', ar: 'مسار البداية' },
+  starter_t: { en: 'For aspiring property managers with no portfolio yet who want to grow within a leading brand, especially in short-term rentals.', ar: 'لمن يطمحون إلى إدارة العقارات دون محفظة حالية، ويرغبون في النمو ضمن علامة رائدة، خاصة في الإيجارات قصيرة الأجل.' },
+  scaleup: { en: 'Scale-up path', ar: 'مسار التوسّع' },
+  scaleup_t: { en: 'For experienced property managers with a loyal homeowner portfolio and established local operations.', ar: 'لمديري العقارات أصحاب الخبرة الذين لديهم محفظة ملاك وفية وعمليات محلية راسخة.' },
+  partner_wa: { en: 'Hello NOZA, I would like to discuss becoming a partner.', ar: 'مرحبًا نوزا، أود مناقشة إمكانية أن أصبح شريكًا.' },
+
+  // blog
+  blog_h1: { en: 'Dubai property guides', ar: 'أدلة العقارات في دبي' },
+  blog_sub: { en: 'Short, direct answers to the questions buyers and landlords ask most.', ar: 'إجابات مختصرة ومباشرة عن أكثر الأسئلة التي يطرحها المشترون والملاك.' },
+  read: { en: 'Read guide', ar: 'اقرأ الدليل' },
+  updated: { en: 'Updated', ar: 'آخر تحديث' },
+
+  // footer
+  ft_company: { en: 'Company', ar: 'الشركة' },
+  ft_services: { en: 'Services', ar: 'الخدمات' },
+  ft_connect: { en: 'Connect', ar: 'تواصل' },
+  ft_tag: { en: 'Dubai real estate brokerage: off-plan, resale, rentals and property management.', ar: 'وساطة عقارية في دبي: مشاريع قيد الإنشاء وإعادة بيع وإيجارات وإدارة عقارات.' },
+  newsletter: { en: 'Market news by email', ar: 'أخبار السوق عبر البريد' },
+  newsletter_sub: { en: 'Subscribe to hear first about UAE real estate news.', ar: 'اشترك لتصلك أخبار العقارات في الإمارات أولًا بأول.' },
+  subscribe: { en: 'Subscribe', ar: 'اشترك' },
+  privacy: { en: 'Privacy policy', ar: 'سياسة الخصوصية' },
+  terms: { en: 'Terms of use', ar: 'شروط الاستخدام' },
+  rights: { en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.' },
+  home: { en: 'Home', ar: 'الرئيسية' },
+
+  // 404
+  nf_h1: { en: 'This page is not here', ar: 'هذه الصفحة غير موجودة' },
+  nf_p: { en: 'The link may be old. Go back to the homepage or ask a broker to find what you need.', ar: 'قد يكون الرابط قديمًا. عد إلى الصفحة الرئيسية أو اطلب من وسيط مساعدتك فيما تبحث عنه.' },
+} satisfies Record<string, Bi>;
+
+export type UiKey = keyof typeof u;
+export const t = (k: UiKey, lang: Lang): string => u[k][lang];

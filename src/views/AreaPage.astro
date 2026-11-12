@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CallbackForm from '../components/CallbackForm.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import FaqList from '../components/FaqList.astro';
+import { Icon } from '../components/icons';
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { wa } from '../data/site';
+import { areas, type Area } from '../data/areas';
+import { projects } from '../data/projects';
+import { faqs } from '../data/content';
+import { areaSchema, faqSchema } from '../data/schema';
+
+const { lang, area } = Astro.props as { lang: Lang; area: Area };
+const name = L(area.name, lang);
+const h1 = lang === 'ar' ? `عقارات ${name} للبيع والاستثمار` : `${name} property for sale and investment`;
+const title = lang === 'ar' ? `عقارات ${name} للبيع | نوزا العقارية` : `${name} Real Estate | Property for Sale | NOZA`;
+const description = (L(area.intro, lang).slice(0, 150).replace(/\s+\S*$/, '') + '…');
+const crumbs = [{ name: t('nav_areas', lang), path: '/#areas' }, { name, path: `/${area.slug}/` }];
+const askMsg = lang === 'ar' ? `مرحبًا نوزا، أبحث عن عقارات في ${name}.` : `Hello NOZA, I am looking for property in ${name}.`;
+const faqSub = faqs.slice(0, 3);
+const others = areas.filter((a) => a.slug !== area.slug);
+---
+<Base lang={lang} path={`/${area.slug}/`} title={title} description={description} image={area.img}
+  crumbs={[{ name: t('home', lang), path: '/' }, { name: t('nav_areas', lang), path: '/' }, { name, path: `/${area.slug}/` }]}
+  schema={[areaSchema(lang, area), faqSchema(lang, faqSub)]}>
+  <PageHero lang={lang} h1={h1} crumbs={[{ name: t('nav_areas', lang), path: '/#areas' }, { name, path: `/${area.slug}/` }]} />
+  <section>
+    <div class="wrap two">
+      <div>
+        <div class="hero-img"><img src={area.img} alt={name} width="960" height="540" decoding="async" /></div>
+        <p class="lead">{L(area.intro, lang)}</p>
+        <ul class="facts">{area.points.map((p) => <li>{L(p, lang)}</li>)}</ul>
+        <a class="btn btn-wa" href={wa(askMsg)} target="_blank" rel="noopener" data-track="area_enquiry"><Fragment set:html={Icon.wa} />{t('area_cta', lang)} {name}</a>
+      </div>
+      <aside class="aside-sticky">
+        <div class="card" style="box-shadow:none;border:1px solid var(--line)">
+          <CallbackForm lang={lang} id="area" variant="enquiry" project={name} title={t('area_query', lang)} />
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section style="padding-block-start:0">
+    <div class="wrap">
+      <h2>{t('trend_title', lang)}</h2>
+      <div class="grid g3" style="margin-block-start:20px">
+        {projects.filter((p) => p.featured).map((p) => <ProjectCard p={p} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-block-start:0">
+    <div class="wrap">
+      <h2 style="margin-block-end:16px">{t('faq_title', lang)}</h2>
+      <FaqList lang={lang} items={faqSub} />
+    </div>
+  </section>
+
+  <section class="dark" style="padding-block:40px">
+    <div class="wrap">
+      <h2 style="font-size:1.4rem">{t('areas_title', lang)}</h2>
+      <div class="chips" style="margin-block:16px 0">
+        {others.map((a) => <a class="chip" style="color:#fff;border-color:#ffffff66;text-decoration:none;display:inline-flex;align-items:center" href={lp(lang, `/${a.slug}/`)}>{L(a.name, lang)}</a>)}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { L, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { wa } from '../data/site';
+import { services } from '../data/content';
+import { serviceSchema } from '../data/schema';
+const { lang } = Astro.props as { lang: Lang };
+const title = lang === 'ar' ? 'خدمات عقارية في دبي | الاستثمار والإدارة | نوزا' : 'Real Estate Services in Dubai | Advisory and Management | NOZA';
+const description = lang === 'ar' ? 'استشارات استثمارية وإدارة عقارات وإيجارات قصيرة الأجل وبيع وتأجير وخدمات المشاريع قيد الإنشاء في دبي.' : 'Investment advisory, property management, holiday-home rentals, sales and leasing, and off-plan services in Dubai.';
+const crumbs = [{ name: t('nav_services', lang), path: '/services/' }];
+---
+<Base lang={lang} path="/services/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={services.map((s) => serviceSchema(lang, s))}>
+  <PageHero lang={lang} h1={t('services_h1', lang)} lead={t('services_sub', lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap">
+      <div class="svc">
+        {services.map((s) => (
+          <article id={s.slug}>
+            <h2 style="font-size:1.5rem">{L(s.title, lang)}</h2>
+            <p>{L(s.text, lang)}</p>
+            <a class="btn btn-dark btn-sm" href={wa(L(s.ask, lang))} target="_blank" rel="noopener" data-track="service_enquiry">{t('learn_more', lang)}</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <FinalCta lang={lang} />
+</Base>

@@ -1,0 +1,13 @@
+---
+import { L, type Lang } from '../i18n';
+import { faqs } from '../data/content';
+const { lang, items = faqs } = Astro.props as { lang: Lang; items?: typeof faqs };
+---
+<div class="faq">
+  {items.map((f, i) => (
+    <details open={i === 0}>
+      <summary>{L(f.q, lang)}</summary>
+      <p>{L(f.a, lang)}</p>
+    </details>
+  ))}
+</div>
