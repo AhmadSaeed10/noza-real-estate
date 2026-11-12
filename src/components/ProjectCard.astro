@@ -1,0 +1,24 @@
+---
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { wa } from '../data/site';
+import type { Project } from '../data/projects';
+const { p, lang } = Astro.props as { p: Project; lang: Lang };
+const ask = wa(lang === 'ar' ? `مرحبًا نوزا، أرغب في معرفة السعر وخطة الدفع لمشروع ${p.name}.` : `Hello NOZA, please send the price and payment plan for ${p.name}.`);
+const price = p.from ? `${t('aed', lang)} ${new Intl.NumberFormat('en-AE').format(p.from)}` : t('price_req', lang);
+---
+<article class="pcard" data-type={p.type}>
+  <div class="ph">
+    <img src={p.img} alt={`${p.name}${p.community ? ', ' + p.community : ''}`} width="640" height="400" loading="lazy" decoding="async" />
+    {p.developer && <span class="dev">{p.developer}</span>}
+  </div>
+  <div class="pb">
+    <h3><a href={lp(lang, `/projects/${p.slug}/`)}>{p.name}</a></h3>
+    <p class="meta">{L(p.tag, lang)}{p.community ? ` · ${p.community}` : ''}</p>
+    <p class="meta">{L(p.summary, lang)}</p>
+    <div class="price">{price}</div>
+    <div class="acts">
+      <a class="btn btn-primary btn-sm" href={ask} target="_blank" rel="noopener" data-track="request_price">{t('req_price', lang)}</a>
+    </div>
+  </div>
+</article>

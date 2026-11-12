@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import CallbackForm from '../components/CallbackForm.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ROICalc from '../components/ROICalc.astro';
+import Skyline from '../components/Skyline.astro';
+import FaqList from '../components/FaqList.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { Icon } from '../components/icons';
+import { L, lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { wa, site } from '../data/site';
+import { services, why, partners, testimonials } from '../data/content';
+import { areas } from '../data/areas';
+import { projects } from '../data/projects';
+import { faqSchema, itemListSchema } from '../data/schema';
+
+const { lang } = Astro.props as { lang: Lang };
+const featured = projects.filter((p) => p.featured);
+const more = projects.filter((p) => !p.featured).slice(0, 3);
+const title = lang === 'ar' ? 'نوزا العقارية دبي | وسطاء عقارات قيد الإنشاء واستثمار' : 'Noza Real Estate Dubai | Off-Plan and Investment Property Brokers';
+const description =
+  lang === 'ar'
+    ? 'اشترِ عقارًا قيد الإنشاء أو جاهزًا أو للإيجار في دبي مع وسطاء معتمدين من ريرا. مشاريع رائجة وحاسبة عائد إيجاري واتصال خلال 55 ثانية.'
+    : 'Buy off-plan, ready and rental property in Dubai with RERA-certified brokers. Trending projects, a rental yield calculator and a callback in 55 seconds.';
+---
+<Base
+  lang={lang}
+  path="/"
+  title={title}
+  description={description}
+  schema={[faqSchema(lang), itemListSchema(lang, t('trend_title', lang), [...featured, ...more].map((p) => ({ name: p.name, url: lp(lang, `/projects/${p.slug}/`) })))]}
+>
+  <section class="hero" style="padding-block-end:0" aria-labelledby="hero-h">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="hero-h">{t('hero_h1', lang)}</h1>
+        <p class="lead">{t('hero_sub', lang)}</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#trending">{t('hero_cta1', lang)}</a>
+          <a class="btn btn-wa" href={wa(t('hero_wa_msg', lang))} target="_blank" rel="noopener" data-track="whatsapp_click"><Fragment set:html={Icon.wa} />{t('hero_cta2', lang)}</a>
+        </div>
+        <ul class="trust">
+          <li><strong>{site.founded}</strong><span>{t('trust_since', lang)}</span></li>
+          <li><strong>50+</strong><span>{t('trust_brokers', lang)}</span></li>
+          <li><strong>30+</strong><span>{t('trust_nat', lang)}</span></li>
+          <li><strong>15+</strong><span>{t('trust_years', lang)}</span></li>
+        </ul>
+      </div>
+      <div class="card" id="callback">
+        <CallbackForm lang={lang} id="hero" headingId="cb-hero" />
+      </div>
+    </div>
+    <Skyline />
+  </section>
+
+  <section class="promo-sec" id="trending" aria-labelledby="trend-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><h2 id="trend-h">{t('trend_title', lang)}</h2><p>{t('trend_sub', lang)}</p></div>
+        <a class="btn btn-dark" href={lp(lang, '/properties/')}>{t('all_projects', lang)}</a>
+      </div>
+      <div class="grid g3">
+        {[...featured, ...more].map((p) => <ProjectCard p={p} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-block-start:0" id="areas" aria-labelledby="areas-h">
+    <div class="wrap">
+      <div class="sec-head"><div><h2 id="areas-h">{t('areas_title', lang)}</h2><p>{t('areas_sub', lang)}</p></div></div>
+      <div class="grid g3">
+        {areas.map((a) => (
+          <a class="acard" href={lp(lang, `/${a.slug}/`)}>
+            <img src={a.img} alt="" width="600" height="450" loading="lazy" decoding="async" />
+            <span>{L(a.name, lang)}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ROICalc lang={lang} />
+
+  <section id="services" aria-labelledby="svc-h">
+    <div class="wrap">
+      <div class="sec-head"><div><h2 id="svc-h">{t('services_title', lang)}</h2><p>{t('services_sub', lang)}</p></div></div>
+      <div class="svc">
+        {services.map((s) => (
+          <article>
+            <h3>{L(s.title, lang)}</h3>
+            <p>{L(s.text, lang)}</p>
+            <a href={wa(L(s.ask, lang))} target="_blank" rel="noopener" data-track="service_enquiry">{t('learn_more', lang)}</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" aria-labelledby="why-h">
+    <div class="wrap">
+      <h2 id="why-h" style="margin-block-end:32px">{t('why_title', lang)}</h2>
+      <div class="why">
+        {why.map((w) => (<div><h3>{L(w.title, lang)}</h3><p>{L(w.text, lang)}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-block:40px" aria-labelledby="partners-h">
+    <div class="wrap">
+      <h2 id="partners-h" style="font-size:1.2rem;font-family:var(--f-body);font-weight:700">{t('partners_title', lang)}</h2>
+      <ul class="partners" dir="ltr">{partners.map((p) => <li>{p}</li>)}</ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="tst-h" style="padding-block-start:24px">
+    <div class="wrap">
+      <h2 id="tst-h" style="margin-block-end:28px">{t('tst_title', lang)}</h2>
+      <div class="tst">
+        {testimonials.map((x) => (<figure><blockquote><p>{L(x.quote, lang)}</p></blockquote><figcaption>{x.name}</figcaption></figure>))}
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-h" style="padding-block-start:24px">
+    <div class="wrap">
+      <h2 id="faq-h" style="margin-block-end:20px">{t('faq_title', lang)}</h2>
+      <FaqList lang={lang} />
+      <p style="margin-block-start:24px"><a class="btn btn-dark" href={wa(t('hero_wa_msg', lang))} target="_blank" rel="noopener">{t('faq_cta', lang)}</a></p>
+    </div>
+  </section>
+
+  <FinalCta lang={lang} />
+</Base>

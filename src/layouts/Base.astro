@@ -1,0 +1,248 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import { t } from '../data/ui';
+import { dir, lp, otherLang, type Lang } from '../i18n';
+import { services } from '../data/content';
+import { L } from '../i18n';
+import CallbackForm from '../components/CallbackForm.astro';
+import { Icon } from '../components/icons';
+
+interface Crumb { name: string; path: string }
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  path: string; // English path, e.g. "/about-noza-real-estate/"
+  image?: string;
+  schema?: Record<string, unknown>[];
+  crumbs?: Crumb[];
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+}
+const { lang, title, description, path, image, schema = [], crumbs = [], noindex = false, ogType = 'website' } = Astro.props;
+
+const origin = site.url;
+const urlFor = (l: Lang) => origin + lp(l, path);
+const canonical = urlFor(lang);
+const ogImage = image ?? site.logo;
+const other = otherLang(lang);
+
+const nav = [
+  ['/properties/', 'nav_properties'],
+  ['/marina/', 'nav_areas'],
+  ['/services/', 'nav_services'],
+  ['/about-noza-real-estate/', 'nav_about'],
+  ['/blog/', 'nav_blog'],
+  ['/contact-us/', 'nav_contact'],
+] as const;
+
+const agent = {
+  '@type': 'RealEstateAgent',
+  '@id': origin + '/#agent',
+  name: site.name,
+  url: origin + '/',
+  logo: site.logo,
+  image: site.logo,
+  telephone: site.phone,
+  foundingDate: String(site.founded),
+  description: 'Dubai real estate brokerage for off-plan, resale and rental property, investment advisory and property management.',
+  areaServed: [{ '@type': 'City', name: 'Dubai' }, { '@type': 'Country', name: 'United Arab Emirates' }],
+  knowsLanguage: ['en', 'ar'],
+  address: { '@type': 'PostalAddress', addressLocality: 'Dubai', addressCountry: 'AE' },
+  founder: { '@type': 'Person', name: site.founder, jobTitle: 'Founder and CEO' },
+  sameAs: Object.values(site.socials),
+  contactPoint: [{ '@type': 'ContactPoint', telephone: site.phone, contactType: 'sales', availableLanguage: ['English', 'Arabic'], areaServed: 'AE' }],
+};
+const webSite = { '@type': 'WebSite', '@id': origin + '/#website', url: origin + '/', name: site.name, inLanguage: ['en-AE', 'ar-AE'], publisher: { '@id': origin + '/#agent' } };
+const breadcrumb = crumbs.length
+  ? { '@type': 'BreadcrumbList', itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: origin + lp(lang, c.path) })) }
+  : null;
+const graph = { '@context': 'https://schema.org', '@graph': [agent, webSite, ...(breadcrumb ? [breadcrumb] : []), ...schema] };
+---
+<!doctype html>
+<html lang={lang} dir={dir(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en-AE" href={urlFor('en')} />
+    <link rel="alternate" hreflang="ar-AE" href={urlFor('ar')} />
+    <link rel="alternate" hreflang="x-default" href={urlFor('en')} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    <meta name="theme-color" content="#0a2f35" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_AE' : 'en_AE'} />
+    <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_AE' : 'ar_AE'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=Young+Serif&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Noto+Kufi+Arabic:wght@500;700&display=swap"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+    {site.ga4 && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga4}`}></script>
+        <script is:inline define:vars={{ id: site.ga4 }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', id);
+        </script>
+      </>
+    )}
+  </head>
+  <body data-wa={site.whatsapp}>
+    <a class="skip" href="#main">{t('skip', lang)}</a>
+    <div class="promo">{t('promo_bar', lang)}</div>
+    <header class="site-header">
+      <div class="wrap hdr">
+        <a class="logo" href={lp(lang, '/')} aria-label={site.name}>
+          <b>NOZA</b>
+          <small>{lang === 'ar' ? 'للعقارات' : 'REAL ESTATE'}</small>
+        </a>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="nav" data-burger>
+          <span class="sr">{t('menu', lang)}</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </button>
+        <nav class="nav" id="nav" aria-label="Primary">
+          {nav.map(([p, k]) => (
+            <a href={lp(lang, p)} aria-current={path === p ? 'page' : undefined}>{t(k, lang)}</a>
+          ))}
+        </nav>
+        <div class="hdr-actions">
+          <a class="lang" href={lp(other, path)} hreflang={other === 'ar' ? 'ar-AE' : 'en-AE'} lang={other} aria-label={t('lang_switch_label', lang)}>{t('lang_switch', lang)}</a>
+          <a class="btn btn-primary btn-sm" href={`tel:${site.phone}`} dir="ltr"><Fragment set:html={Icon.phone} /><span>{site.phoneDisplay}</span></a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main"><slot /></main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="fgrid">
+          <div>
+            <a class="logo" href={lp(lang, '/')} aria-label={site.name}><b style="color:#fff">NOZA</b><small>{lang === 'ar' ? 'للعقارات' : 'REAL ESTATE'}</small></a>
+            <p style="margin-block-start:14px">{t('ft_tag', lang)}</p>
+            <p dir="ltr" style="text-align:start"><a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></p>
+          </div>
+          <div>
+            <h4>{t('ft_company', lang)}</h4>
+            <ul>
+              <li><a href={lp(lang, '/about-noza-real-estate/')}>{t('nav_about', lang)}</a></li>
+              <li><a href={lp(lang, '/ceo-message/')}>{t('ceo_h1', lang)}</a></li>
+              <li><a href={lp(lang, '/properties/')}>{t('nav_properties', lang)}</a></li>
+              <li><a href={lp(lang, '/blog/')}>{t('nav_blog', lang)}</a></li>
+              <li><a href={lp(lang, '/contact-us/')}>{t('nav_contact', lang)}</a></li>
+              <li><a href={lp(lang, '/contact-us/') + '#become-partner'}>{t('partner_title', lang)}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>{t('ft_services', lang)}</h4>
+            <ul>
+              {services.map((s) => (<li><a href={lp(lang, '/services/') + '#' + s.slug}>{L(s.title, lang)}</a></li>))}
+            </ul>
+          </div>
+          <div>
+            <h4>{t('ft_connect', lang)}</h4>
+            <div class="social">
+              <a href={site.socials.instagram} rel="noopener" target="_blank">Instagram</a>
+              <a href={site.socials.facebook} rel="noopener" target="_blank">Facebook</a>
+              <a href={site.socials.linkedin} rel="noopener" target="_blank">LinkedIn</a>
+              <a href={site.socials.tiktok} rel="noopener" target="_blank">TikTok</a>
+            </div>
+          </div>
+        </div>
+        <div class="fbar">
+          <span>© {new Date().getFullYear()} {site.name}. {t('rights', lang)}</span>
+          <span><a href={lp(lang, '/privacy-policy/')}>{t('privacy', lang)}</a> · <a href={lp(lang, '/terms-of-use/')}>{t('terms', lang)}</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="bar" role="group" aria-label="Contact">
+      <a class="c" href={`tel:${site.phone}`}><Fragment set:html={Icon.phone} />{t('call', lang)}</a>
+      <a class="w" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener" data-track="whatsapp_click"><Fragment set:html={Icon.wa} />{t('whatsapp', lang)}</a>
+      <button type="button" data-open-callback><Fragment set:html={Icon.bell} />{t('call_me', lang)}</button>
+    </div>
+
+    <dialog id="callback-dialog" aria-labelledby="cb-dlg-title">
+      <div class="card">
+        <button class="x" type="button" data-close-callback aria-label={t('close', lang)}>×</button>
+        <CallbackForm lang={lang} id="dlg" headingId="cb-dlg-title" />
+      </div>
+    </dialog>
+
+    <script>
+      const $$ = (s: string, r: ParentNode = document) => Array.from(r.querySelectorAll<HTMLElement>(s));
+      const push = (event: string, data: Record<string, unknown> = {}) => {
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        (window as any).dataLayer.push({ event, ...data });
+      };
+
+      // mobile nav
+      const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+      const nav = document.getElementById('nav');
+      burger?.addEventListener('click', () => {
+        const open = nav!.classList.toggle('open');
+        burger.setAttribute('aria-expanded', String(open));
+      });
+
+      // callback dialog
+      const dlg = document.getElementById('callback-dialog') as HTMLDialogElement | null;
+      $$('[data-open-callback]').forEach((b) => b.addEventListener('click', () => { dlg?.showModal(); push('callback_open'); }));
+      $$('[data-close-callback]').forEach((b) => b.addEventListener('click', () => dlg?.close()));
+      dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+      $$('[data-track]').forEach((a) => a.addEventListener('click', () => push(a.dataset.track!)));
+
+      // lead forms
+      const WA = document.body.dataset.wa || '';
+      $$('form[data-lead]').forEach((el) => {
+        const form = el as HTMLFormElement;
+        const status = form.querySelector<HTMLElement>('.status')!;
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const d = form.dataset;
+          const fd = new FormData(form);
+          if (fd.get('company')) return; // honeypot
+          const phone = String(fd.get('phone') || '').replace(/[\s()-]/g, '');
+          if (!/^\+?\d{8,15}$/.test(phone)) {
+            status.className = 'status err'; status.textContent = d.errPhone || ''; form.querySelector<HTMLInputElement>('[name=phone]')?.focus(); return;
+          }
+          const data: Record<string, string> = {};
+          fd.forEach((v, k) => { if (k !== 'company') data[k] = String(v); });
+          data.phone = phone; data.page = location.href; data.lang = document.documentElement.lang; data.form = d.lead || '';
+          const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+          btn.disabled = true; status.className = 'status'; status.textContent = d.sending || '';
+          const endpoint = d.endpoint;
+          try {
+            if (endpoint) {
+              const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+              if (!r.ok) throw new Error('bad status');
+              status.className = 'status ok'; status.textContent = d.ok || ''; form.reset();
+            } else {
+              const lines = [d.waIntro || 'Hello NOZA', ...Object.entries(data).filter(([k]) => !['page', 'lang', 'form'].includes(k) && data[k]).map(([k, v]) => `${k}: ${v}`)];
+              status.className = 'status ok'; status.textContent = d.okWa || '';
+              window.open(`https://wa.me/${WA}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+            }
+            push('generate_lead', { form_name: d.lead, project: data.project || undefined });
+          } catch {
+            status.className = 'status err'; status.textContent = d.err || '';
+          } finally { btn.disabled = false; }
+        });
+      });
+    </script>
+  </body>
+</html>

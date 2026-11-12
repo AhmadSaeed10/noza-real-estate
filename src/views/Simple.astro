@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { lp, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { site } from '../data/site';
+// kind: 'privacy' | 'terms' | '404'
+const { lang, kind } = Astro.props as { lang: Lang; kind: 'privacy' | 'terms' | '404' };
+const copy = {
+  privacy: {
+    path: '/privacy-policy/',
+    h1: t('privacy', lang),
+    body: lang === 'ar'
+      ? ['نجمع الاسم ورقم الجوال والبريد الإلكتروني وتفاصيل الطلب التي تقدمها عبر النماذج، لنتواصل معك بشأن العقارات والخدمات التي تسأل عنها.', 'لا نبيع بياناتك. قد نستخدم أدوات تحليلات لفهم استخدام الموقع. للاستفسار عن بياناتك أو طلب حذفها، اتصل بنا على ' + site.phoneDisplay + '.']
+      : ['We collect the name, mobile number, email and request details you submit in our forms, so we can contact you about the properties and services you ask about.', 'We do not sell your data. We may use analytics tools to understand how the site is used. To ask about your data or request deletion, call us on ' + site.phoneDisplay + '.'],
+  },
+  terms: {
+    path: '/terms-of-use/',
+    h1: t('terms', lang),
+    body: lang === 'ar'
+      ? ['المعلومات في هذا الموقع للإرشاد العام وليست عرضًا ملزمًا. تتغير الأسعار والتوفر وخطط الدفع بحسب المطوّر، ونؤكدها لك عند الطلب.', 'العوائد والأرقام المعروضة توضيحية ولا تمثل ضمانًا للأداء.']
+      : ['Information on this site is general guidance and not a binding offer. Prices, availability and payment plans change by developer, and we confirm them when you ask.', 'Yields and figures shown are illustrative and are not a guarantee of performance.'],
+  },
+  '404': {
+    path: '/404.html',
+    h1: t('nf_h1', lang),
+    body: [t('nf_p', lang)],
+  },
+}[kind];
+---
+<Base lang={lang} path={copy.path} title={`${copy.h1} | NOZA Real Estate`} description={copy.body[0].slice(0, 150)} noindex={kind === '404'}>
+  <PageHero lang={lang} h1={copy.h1} crumbs={kind === '404' ? [] : [{ name: copy.h1, path: copy.path }]} />
+  <section>
+    <div class="wrap" style="max-inline-size:760px">
+      {copy.body.map((b) => <p>{b}</p>)}
+      {kind === '404' && <p><a class="btn btn-primary" href={lp(lang, '/')}>{t('home', lang)}</a></p>}
+    </div>
+  </section>
+</Base>

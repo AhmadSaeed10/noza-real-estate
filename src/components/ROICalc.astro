@@ -1,0 +1,58 @@
+---
+import { t } from '../data/ui';
+import { site } from '../data/site';
+import type { Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const msg = lang === 'ar' ? 'مرحبًا نوزا، أرغب في توقعات مخصصة بناءً على هذه الأرقام:' : 'Hello NOZA, I would like a tailored projection based on these numbers:';
+---
+<section class="dark" id="roi" aria-labelledby="roi-h">
+  <div class="wrap roi" data-roi data-lang={lang} data-wa={site.whatsapp} data-msg={msg} data-aed={t('aed', lang)}>
+    <div>
+      <h2 id="roi-h">{t('roi_title', lang)}</h2>
+      <p class="lead">{t('roi_sub', lang)}</p>
+      <form class="form" onsubmit="return false" style="margin-block-start:20px">
+        <div class="field"><label for="roi-price">{t('roi_price', lang)}</label><input id="roi-price" type="number" inputmode="numeric" min="0" step="10000" value="1000000" /></div>
+        <div class="row">
+          <div class="field"><label for="roi-yield">{t('roi_yield', lang)}</label><input id="roi-yield" type="number" inputmode="decimal" min="0" max="30" step="0.1" value="8" /></div>
+          <div class="field"><label for="roi-costs">{t('roi_costs', lang)}</label><input id="roi-costs" type="number" inputmode="decimal" min="0" max="80" step="1" value="20" /></div>
+        </div>
+        <div class="field"><label for="roi-vac">{t('roi_vacancy', lang)}</label><input id="roi-vac" type="number" inputmode="decimal" min="0" max="12" step="0.5" value="1" /></div>
+      </form>
+    </div>
+    <div class="card" aria-live="polite">
+      <div class="out" style="color:var(--ink)">
+        <div style="border-color:var(--line)"><span>{t('roi_gross', lang)}</span><strong style="color:var(--teal)" data-o="gross">–</strong></div>
+        <div style="border-color:var(--line)"><span>{t('roi_net', lang)}</span><strong style="color:var(--teal)" data-o="net">–</strong></div>
+        <div style="border-color:var(--line)"><span>{t('roi_net_yield', lang)}</span><strong style="color:var(--teal)" data-o="ny">–</strong></div>
+        <div style="border-color:var(--line)"><span>{t('roi_five', lang)}</span><strong style="color:var(--teal)" data-o="five">–</strong></div>
+      </div>
+      <a class="btn btn-wa" data-o="cta" href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener" style="margin-block-start:16px;inline-size:100%">{t('roi_cta', lang)}</a>
+      <p class="fine" style="margin-block-start:12px">{t('roi_disclaimer', lang)}</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-roi]').forEach((root) => {
+    const g = (id: string) => parseFloat((root.querySelector<HTMLInputElement>('#' + id)!).value) || 0;
+    const out = (k: string) => root.querySelector<HTMLElement>(`[data-o=${k}]`)!;
+    const lang = root.dataset.lang === 'ar' ? 'ar-AE' : 'en-AE';
+    const nf = new Intl.NumberFormat(lang, { maximumFractionDigits: 0 });
+    const aed = root.dataset.aed || 'AED';
+    const money = (n: number) => `${nf.format(Math.round(n))} ${aed}`;
+    const calc = () => {
+      const price = g('roi-price'), y = g('roi-yield') / 100, c = g('roi-costs') / 100, vac = Math.min(12, g('roi-vac'));
+      const gross = price * y;
+      const net = gross * ((12 - vac) / 12) * (1 - c);
+      const ny = price ? (net / price) * 100 : 0;
+      out('gross').textContent = money(gross);
+      out('net').textContent = money(net);
+      out('ny').textContent = ny.toFixed(1) + '%';
+      out('five').textContent = money(net * 5);
+      const text = `${root.dataset.msg}\n${money(price)} | ${(y * 100).toFixed(1)}% | net ${ny.toFixed(1)}%`;
+      (out('cta') as HTMLAnchorElement).href = `https://wa.me/${root.dataset.wa}?text=${encodeURIComponent(text)}`;
+    };
+    root.querySelectorAll('input').forEach((i) => i.addEventListener('input', calc));
+    calc();
+  });
+</script>

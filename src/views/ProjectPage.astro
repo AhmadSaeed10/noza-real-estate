@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CallbackForm from '../components/CallbackForm.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import FaqList from '../components/FaqList.astro';
+import { Icon } from '../components/icons';
+import { L, type Lang } from '../i18n';
+import { t } from '../data/ui';
+import { wa } from '../data/site';
+import { projects, type Project } from '../data/projects';
+import { faqs } from '../data/content';
+import { faqSchema, projectSchema } from '../data/schema';
+
+const { lang, p } = Astro.props as { lang: Lang; p: Project };
+const h1 = lang === 'ar' ? `${p.name}: الأسعار وخطط الدفع` : `${p.name}: prices and payment plan`;
+const title = lang === 'ar' ? `${p.name} دبي | الأسعار وخطة الدفع | نوزا` : `${p.name} Dubai | Prices and Payment Plan | NOZA`;
+const description = L(p.summary, lang).slice(0, 155);
+const crumbs = [{ name: t('nav_properties', lang), path: '/properties/' }, { name: p.name, path: `/projects/${p.slug}/` }];
+const ask = wa(lang === 'ar' ? `مرحبًا نوزا، أرغب في معرفة السعر وخطة الدفع لمشروع ${p.name}.` : `Hello NOZA, please send the price and payment plan for ${p.name}.`);
+const similar = projects.filter((x) => x.slug !== p.slug).slice(0, 3);
+const faqSub = faqs.slice(5, 7);
+const facts: [string, string][] = [];
+if (p.developer) facts.push([t('developer', lang), p.developer]);
+if (p.community) facts.push([t('community', lang), p.community]);
+if (p.units) facts.push([lang === 'ar' ? 'الوحدات' : 'Units', L(p.units, lang)]);
+---
+<Base lang={lang} path={`/projects/${p.slug}/`} title={title} description={description} image={p.img}
+  crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[projectSchema(lang, p), faqSchema(lang, faqSub)]}>
+  <PageHero lang={lang} h1={h1} lead={L(p.tag, lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap two">
+      <div>
+        <div class="hero-img"><img src={p.img} alt={p.name} width="960" height="540" decoding="async" /></div>
+        <h2>{t('overview', lang)}</h2>
+        <p class="lead">{L(p.summary, lang)}</p>
+        <ul class="facts">
+          {facts.map(([k, v]) => <li><strong>{k}:</strong> {v}</li>)}
+          <li><strong>{lang === 'ar' ? 'السعر' : 'Price'}:</strong> {t('price_req', lang)}</li>
+          {!p.developer && <li>{t('dev_on_req', lang)}</li>}
+        </ul>
+        <p><a class="btn btn-wa" href={ask} target="_blank" rel="noopener" data-track="request_price"><Fragment set:html={Icon.wa} />{t('req_price', lang)}</a></p>
+        <div class="card" style="box-shadow:none;border:1px solid var(--line);margin-block-start:32px">
+          <CallbackForm lang={lang} id="brochure" variant="brochure" project={p.name} />
+        </div>
+      </div>
+      <aside class="aside-sticky">
+        <div class="card" style="box-shadow:none;border:1px solid var(--line)">
+          <CallbackForm lang={lang} id="proj" variant="enquiry" project={p.name} />
+        </div>
+      </aside>
+    </div>
+  </section>
+  <section style="padding-block-start:0">
+    <div class="wrap">
+      <h2 style="margin-block-end:16px">{t('faq_title', lang)}</h2>
+      <FaqList lang={lang} items={faqSub} />
+    </div>
+  </section>
+  <section style="padding-block-start:0">
+    <div class="wrap">
+      <h2>{t('trend_title', lang)}</h2>
+      <div class="grid g3" style="margin-block-start:20px">{similar.map((x) => <ProjectCard p={x} lang={lang} />)}</div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CallbackForm from '../components/CallbackForm.astro';
+import { Icon } from '../components/icons';
+import type { Lang } from '../i18n';
+import { t } from '../data/ui';
+import { site, wa } from '../data/site';
+const { lang } = Astro.props as { lang: Lang };
+const title = lang === 'ar' ? 'تواصل معنا | نوزا العقارية دبي' : 'Contact NOZA Real Estate | Dubai Property Brokers';
+const description = lang === 'ar' ? 'اتصل بنوزا العقارية في دبي أو راسلنا عبر واتساب أو اترك بياناتك وسنردّ في اليوم نفسه.' : 'Call NOZA Real Estate in Dubai, message us on WhatsApp, or leave your details and we reply the same day.';
+const crumbs = [{ name: t('nav_contact', lang), path: '/contact-us/' }];
+const cp = { '@type': 'ContactPage', name: title, url: site.url + (lang === 'ar' ? '/ar' : '') + '/contact-us/' };
+---
+<Base lang={lang} path="/contact-us/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[cp]}>
+  <PageHero lang={lang} h1={t('contact_h1', lang)} lead={t('contact_sub', lang)} crumbs={crumbs} />
+  <section>
+    <div class="wrap two">
+      <div class="card" style="box-shadow:none;border:1px solid var(--line)">
+        <CallbackForm lang={lang} id="contact" variant="contact" />
+      </div>
+      <aside class="aside-sticky">
+        <a class="btn btn-wa" href={wa(t('hero_wa_msg', lang))} target="_blank" rel="noopener" data-track="whatsapp_click"><Fragment set:html={Icon.wa} />{t('whatsapp', lang)}</a>
+        <a class="btn btn-dark" href={`tel:${site.phone}`} dir="ltr"><Fragment set:html={Icon.phone} />{site.phoneDisplay}</a>
+      </aside>
+    </div>
+  </section>
+  <section id="become-partner" class="dark" aria-labelledby="partner-h">
+    <div class="wrap">
+      <h2 id="partner-h">{t('partner_title', lang)}</h2>
+      <div class="why" style="margin-block-start:24px">
+        <div><h3>{t('starter', lang)}</h3><p>{t('starter_t', lang)}</p></div>
+        <div><h3>{t('scaleup', lang)}</h3><p>{t('scaleup_t', lang)}</p></div>
+      </div>
+      <p style="margin-block-start:24px"><a class="btn btn-primary" href={wa(t('partner_wa', lang))} target="_blank" rel="noopener">{t('whatsapp', lang)}</a></p>
+    </div>
+  </section>
+</Base>
