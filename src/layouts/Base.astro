@@ -83,6 +83,14 @@ const graph = { '@context': 'https://schema.org', '@graph': [agent, webSite, ...
     <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_AE' : 'ar_AE'} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/images/noza-logo.png" />
+    <script is:inline>
+      // Hide reveal targets before first paint; un-hide if the reveal script never runs.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('rv');
+        setTimeout(function () { if (!window.__rv) document.documentElement.classList.remove('rv'); }, 2500);
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -107,9 +115,8 @@ const graph = { '@context': 'https://schema.org', '@graph': [agent, webSite, ...
     <div class="promo">{t('promo_bar', lang)}</div>
     <header class="site-header">
       <div class="wrap hdr">
-        <a class="logo" href={lp(lang, '/')} aria-label={site.name}>
-          <b>NOZA</b>
-          <small>{lang === 'ar' ? 'للعقارات' : 'REAL ESTATE'}</small>
+        <a class="logo" href={lp(lang, '/')}>
+          <img src="/images/noza-logo.png" alt={site.name} width="234" height="280" />
         </a>
         <button class="burger" type="button" aria-expanded="false" aria-controls="nav" data-burger>
           <span class="sr">{t('menu', lang)}</span>
@@ -133,7 +140,7 @@ const graph = { '@context': 'https://schema.org', '@graph': [agent, webSite, ...
       <div class="wrap">
         <div class="fgrid">
           <div>
-            <a class="logo" href={lp(lang, '/')} aria-label={site.name}><b style="color:#fff">NOZA</b><small>{lang === 'ar' ? 'للعقارات' : 'REAL ESTATE'}</small></a>
+            <a class="logo logo-ft" href={lp(lang, '/')}><img src="/images/noza-logo.png" alt={site.name} width="234" height="280" loading="lazy" /></a>
             <p style="margin-block-start:14px">{t('ft_tag', lang)}</p>
             <p dir="ltr" style="text-align:start"><a href={`tel:${site.phone}`}>{site.phoneDisplay}</a></p>
           </div>
@@ -204,6 +211,46 @@ const graph = { '@context': 'https://schema.org', '@graph': [agent, webSite, ...
       $$('[data-open-callback]').forEach((b) => b.addEventListener('click', () => { dlg?.showModal(); push('callback_open'); }));
       $$('[data-close-callback]').forEach((b) => b.addEventListener('click', () => dlg?.close()));
       dlg?.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+      // Wave reveal: elements rise in once their top passes the middle of the window.
+      (window as any).__rv = true;
+      if (document.documentElement.classList.contains('rv')) {
+        const sel = [
+          'main section:not(.hero) .sec-head', 'main section:not(.hero) > .wrap > h2', '.grid > *', '.lm-grid > *', '.svc > article',
+          '.why > div', '.tst > figure', '.faq details', '.partners li', '.two > *', '.final .grid-2 > *', '.roi > *',
+          '.person', '.answer', '.facts li', '.chips > *',
+        ].join(',');
+        const pending: HTMLElement[] = [];
+        $$(sel, document.getElementById('main')!).forEach((el) => {
+          if (el.closest('.hero, .phero') || el.parentElement?.closest('[data-rv]')) return;
+          const i = Array.from(el.parentElement!.children).indexOf(el);
+          el.dataset.rv = '';
+          el.style.setProperty('--rv-y', `${Math.round(42 + 22 * Math.sin(i * 1.1))}px`);
+          el.style.setProperty('--rv-r', `${(1.6 * Math.sin(i * 1.3 + 0.6)).toFixed(2)}deg`);
+          pending.push(el);
+        });
+        let ticking = false;
+        let first = true;
+        const check = () => {
+          ticking = false;
+          // first pass reveals what is already on screen; after that the trigger line is mid-window
+          const mid = innerHeight * (first ? 0.92 : 0.5);
+          first = false;
+          const atEnd = scrollY + innerHeight >= document.documentElement.scrollHeight - 8;
+          const batch = pending.filter((el) => atEnd || el.getBoundingClientRect().top < mid);
+          // stagger the batch in document order so neighbours follow each other like a wave
+          batch.forEach((el, n) => {
+            el.style.setProperty('--rv-d', `${n * 85}ms`);
+            el.classList.add('in');
+            pending.splice(pending.indexOf(el), 1);
+          });
+          if (!pending.length) { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); }
+        };
+        const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(check); } };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        check();
+      }
 
       $$('[data-track]').forEach((a) => a.addEventListener('click', () => push(a.dataset.track!)));
 

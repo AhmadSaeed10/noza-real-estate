@@ -20,7 +20,7 @@ const filters = [
 ---
 <Base lang={lang} path="/properties/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]}
   schema={[itemListSchema(lang, t('properties_h1', lang), projects.map((p) => ({ name: p.name, url: lp(lang, `/projects/${p.slug}/`) })))]}>
-  <PageHero lang={lang} h1={t('properties_h1', lang)} lead={t('properties_sub', lang)} crumbs={crumbs} />
+  <PageHero mark="burj-khalifa" lang={lang} h1={t('properties_h1', lang)} lead={t('properties_sub', lang)} crumbs={crumbs} />
   <section>
     <div class="wrap">
       <div class="chips" role="group" aria-label="Filter">

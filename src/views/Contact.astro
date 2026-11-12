@@ -13,7 +13,7 @@ const crumbs = [{ name: t('nav_contact', lang), path: '/contact-us/' }];
 const cp = { '@type': 'ContactPage', name: title, url: site.url + (lang === 'ar' ? '/ar' : '') + '/contact-us/' };
 ---
 <Base lang={lang} path="/contact-us/" title={title} description={description} crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[cp]}>
-  <PageHero lang={lang} h1={t('contact_h1', lang)} lead={t('contact_sub', lang)} crumbs={crumbs} />
+  <PageHero mark="burj-al-arab" lang={lang} h1={t('contact_h1', lang)} lead={t('contact_sub', lang)} crumbs={crumbs} />
   <section>
     <div class="wrap two">
       <div class="card" style="box-shadow:none;border:1px solid var(--line)">

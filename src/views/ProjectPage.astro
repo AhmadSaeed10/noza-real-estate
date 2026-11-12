@@ -27,7 +27,7 @@ if (p.units) facts.push([lang === 'ar' ? 'الوحدات' : 'Units', L(p.units, 
 ---
 <Base lang={lang} path={`/projects/${p.slug}/`} title={title} description={description} image={p.img}
   crumbs={[{ name: t('home', lang), path: '/' }, ...crumbs]} schema={[projectSchema(lang, p), faqSchema(lang, faqSub)]}>
-  <PageHero lang={lang} h1={h1} lead={L(p.tag, lang)} crumbs={crumbs} />
+  <PageHero mark="burj-khalifa" lang={lang} h1={h1} lead={L(p.tag, lang)} crumbs={crumbs} />
   <section>
     <div class="wrap two">
       <div>
