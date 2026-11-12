@@ -28,3 +28,10 @@ npm run build    # outputs dist/
 
 ## Structure
 `src/data/` content (bilingual `{en, ar}`) | `src/views/` page templates | `src/pages/` thin routes (EN + `ar/`) | `src/components/` | `src/layouts/Base.astro` head, header, footer, forms script
+
+## Deploy (Netlify)
+`netlify.toml` holds the build settings (`npm run build`, publish `dist`, Node 22), security and cache headers, and redirects.
+1. Netlify > Add new site > Import from Git > pick this repo. Build settings are read from `netlify.toml`.
+2. Site configuration > Environment variables: add `PUBLIC_FORM_ENDPOINT` and `PUBLIC_GA4_ID`, then redeploy.
+3. Add the WordPress `?p=ID` 301s in the commented block in `netlify.toml`.
+4. Domain management: add `nozarealestate.ae` (and `www`) when ready to switch.

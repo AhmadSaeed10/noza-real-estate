@@ -1,0 +1,63 @@
+# Netlify config for the NOZA Real Estate Astro site (static output).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Set these in Netlify UI > Site configuration > Environment variables:
+  # PUBLIC_FORM_ENDPOINT  (form endpoint; empty falls back to WhatsApp)
+  # PUBLIC_GA4_ID         (GA4 measurement ID)
+
+# ---------------------------------------------------------------
+# Redirects
+# ---------------------------------------------------------------
+
+# Force the apex domain (remove once the custom domain is connected
+# if Netlify's primary domain setting already handles this).
+[[redirects]]
+  from = "https://www.nozarealestate.ae/*"
+  to = "https://nozarealestate.ae/:splat"
+  status = 301
+  force = true
+
+# Old WordPress project URLs (/?p=ID) to the new project pages.
+# Fill in each ID from the live site, then uncomment. Example:
+#
+# [[redirects]]
+#   from = "/"
+#   to = "/projects/azizi-venice/"
+#   status = 301
+#   force = true
+#   query = { p = "1234" }
+
+# Arabic 404 falls back to the shared 404 page.
+[[redirects]]
+  from = "/ar/*"
+  to = "/404.html"
+  status = 404
+
+# ---------------------------------------------------------------
+# Headers
+# ---------------------------------------------------------------
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Astro's hashed assets never change, so cache them for a year.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
